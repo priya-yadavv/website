@@ -1,14 +1,14 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Bot, Star, ThumbsUp, Lightbulb, Frown, HelpCircle } from "lucide-react";
+import { Bot, Star, ThumbsUp, Lightbulb, Frown, HelpCircle } from "lucide-react";
 import { useState } from "react";
 
 const QUICK_REPLIES = [
-  { id: "helpful", label: "Very Helpful", icon: ThumbsUp, color: "text-emerald-500", bg: "bg-emerald-500/10", activeBg: "bg-emerald-500", border: "border-emerald-500/20" },
-  { id: "improve", label: "Needs Improvement", icon: Lightbulb, color: "text-amber-500", bg: "bg-amber-500/10", activeBg: "bg-amber-500", border: "border-amber-500/20" },
-  { id: "confusing", label: "Confusing", icon: Frown, color: "text-orange-500", bg: "bg-orange-500/10", activeBg: "bg-orange-500", border: "border-orange-500/20" },
-  { id: "suggest", label: "Have Suggestions", icon: HelpCircle, color: "text-blue-500", bg: "bg-blue-500/10", activeBg: "bg-blue-500", border: "border-blue-500/20" },
+  { id: "helpful", label: "Very Helpful", icon: ThumbsUp, color: "text-emerald-500", bg: "bg-emerald-500/10", activeBg: "bg-emerald-500" },
+  { id: "improve", label: "Needs Improvement", icon: Lightbulb, color: "text-amber-500", bg: "bg-amber-500/10", activeBg: "bg-amber-500" },
+  { id: "confusing", label: "Confusing", icon: Frown, color: "text-orange-500", bg: "bg-orange-500/10", activeBg: "bg-orange-500" },
+  { id: "suggest", label: "Have Suggestions", icon: HelpCircle, color: "text-blue-500", bg: "bg-blue-500/10", activeBg: "bg-blue-500" },
 ];
 
 export default function FeedbackPage() {
@@ -21,6 +21,7 @@ export default function FeedbackPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
+
     setTimeout(() => {
       setRating(0);
       setQuickLabel(null);
@@ -31,7 +32,7 @@ export default function FeedbackPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center pt-20 pb-12 px-4 relative">
-      
+
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -47,7 +48,9 @@ export default function FeedbackPage() {
             >
               <Bot className="w-12 h-12 mx-auto mb-4" />
               <h2 className="text-2xl font-bold">Thanks for your feedback 🚀</h2>
-              <p className="text-gray-400 mt-2">This helps improve the system</p>
+              <p className="text-gray-400 mt-2">
+                This helps improve the system
+              </p>
             </motion.div>
           ) : (
             <motion.form
@@ -55,9 +58,20 @@ export default function FeedbackPage() {
               onSubmit={handleSubmit}
               className="space-y-6"
             >
-              <h2 className="text-2xl font-bold text-center">
-                Share your feedback 💬
-              </h2>
+
+              {/* 🤖 Header */}
+              <div className="text-center">
+                <Bot className="w-12 h-12 mx-auto mb-3" />
+
+                <h2 className="text-2xl font-bold">
+                  Share your feedback 💬
+                </h2>
+
+                {/* ✅ HUMAN THINKING LINE (FIXED POSITION) */}
+                <p className="text-gray-400 mt-2 text-sm italic">
+                  I'm learning from your thoughts...
+                </p>
+              </div>
 
               {/* ⭐ Rating */}
               <div className="flex justify-center gap-2">
@@ -70,7 +84,7 @@ export default function FeedbackPage() {
                     onClick={() => setRating(star)}
                   >
                     <Star
-                      className={`w-8 h-8 ${
+                      className={`w-8 h-8 transition ${
                         (hoverRating || rating) >= star
                           ? "text-yellow-400 fill-yellow-400"
                           : "text-gray-400"
@@ -80,7 +94,7 @@ export default function FeedbackPage() {
                 ))}
               </div>
 
-              {/* Quick options */}
+              {/* 💬 Quick options */}
               <div className="grid grid-cols-2 gap-3">
                 {QUICK_REPLIES.map((reply) => {
                   const isSelected = quickLabel === reply.id;
@@ -92,7 +106,7 @@ export default function FeedbackPage() {
                       onClick={() =>
                         setQuickLabel(isSelected ? null : reply.id)
                       }
-                      className={`p-3 rounded-xl border flex items-center gap-2 text-sm ${
+                      className={`p-3 rounded-xl border flex items-center gap-2 text-sm transition ${
                         isSelected
                           ? `${reply.activeBg} text-white`
                           : `${reply.bg} ${reply.color}`
@@ -105,22 +119,23 @@ export default function FeedbackPage() {
                 })}
               </div>
 
-              {/* Textarea */}
+              {/* 📝 Textarea */}
               <textarea
                 value={suggestion}
                 onChange={(e) => setSuggestion(e.target.value)}
                 placeholder="Write your feedback..."
-                className="w-full p-4 rounded-xl border"
+                className="w-full p-4 rounded-xl border bg-transparent outline-none"
               />
 
-              {/* Submit */}
+              {/* 🚀 Submit */}
               <button
                 type="submit"
-                disabled={!rating && !quickLabel && !suggestion}
+                disabled={!rating && !quickLabel && !suggestion.trim()}
                 className="w-full bg-black text-white py-3 rounded-xl disabled:opacity-50"
               >
                 Submit Feedback
               </button>
+
             </motion.form>
           )}
         </AnimatePresence>
