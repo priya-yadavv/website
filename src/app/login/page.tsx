@@ -38,7 +38,7 @@ export default function LoginPage() {
     // ✅ ADD THIS LINE HERE
     localStorage.setItem("user", email);
 
-    router.push("/features");
+    window.location.href = "/features";
     } catch (error) {
       console.error("Login error:", error);
       alert("Something went wrong ❌");
