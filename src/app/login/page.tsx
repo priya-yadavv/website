@@ -22,7 +22,7 @@ export default function LoginPage(){
 
     const data = await res.json();
 
-    if (data.success) {
+    if (res.ok) {
       alert("Login success");
       router.push("/features");
     } else {
