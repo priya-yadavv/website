@@ -6,26 +6,26 @@ const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
     try {
-        const { name, email, password } = await request.json();
+        const { email, password } = await request.json();
 
-        // Input validation
-        if (!name || !email || !password) {
-            return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
+        if (!email || !password) {
+            return NextResponse.json({ message: 'Email and password are required' }, { status: 400 });
         }
 
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Save user to database
-        const user = await prisma.user.create({
-            data: {
-                name,
-                email,
-                password: hashedPassword,
-            },
+        const existingUser = await prisma.user.findUnique({
+            where: { email },
         });
 
-        return NextResponse.json({ message: 'User created', user }, { status: 201 });
+        if (existingUser) {
+            return NextResponse.json({ message: 'Email already registered' }, { status: 409 });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await prisma.user.create({
+            data: { email, password: hashedPassword },
+        });
+
+        return NextResponse.json({ message: 'User created successfully', userId: user.id }, { status: 201 });
     } catch (error) {
         console.error(error);
         return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
