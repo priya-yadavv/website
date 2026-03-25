@@ -35,9 +35,10 @@ export default function LoginPage() {
 
       alert("Login successful ✅");
 
-      // 👉 redirect after login
-      router.push("/features");
+    // ✅ ADD THIS LINE HERE
+    localStorage.setItem("user", email);
 
+    router.push("/features");
     } catch (error) {
       console.error("Login error:", error);
       alert("Something went wrong ❌");
