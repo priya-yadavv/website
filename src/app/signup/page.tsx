@@ -28,14 +28,14 @@ export default function SignupPage() {
 
       const data = await res.json();
 
-      console.log("SIGNUP RESPONSE:", data); // 🔥 DEBUG
-
       if (!res.ok) {
         alert(data.message || "Signup failed ❌");
         return;
       }
 
       alert("Signup successful ✅");
+
+      // 👉 redirect after signup
       router.push("/login");
 
     } catch (error) {
@@ -47,42 +47,65 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center pt-20 pb-12 px-4">
-      <motion.div className="max-w-md w-full p-10 rounded-3xl shadow-2xl">
-        <h2 className="text-3xl font-bold text-center mb-6">Signup</h2>
+    <div className="min-h-screen flex items-center justify-center px-4">
 
-        <form onSubmit={handleSignup} className="space-y-4">
+      {/* CARD */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-lg p-10 rounded-3xl shadow-2xl border 
+                   bg-white/10 backdrop-blur-xl"
+      >
+
+        {/* TITLE */}
+        <h2 className="text-4xl font-extrabold text-center mb-6">
+          Create Account 🚀
+        </h2>
+
+        {/* FORM */}
+        <form onSubmit={handleSignup} className="space-y-5">
+
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Enter your email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-3 border rounded"
+            className="w-full p-4 rounded-xl border outline-none 
+                       focus:ring-2 focus:ring-black"
           />
 
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Enter your password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-3 border rounded"
+            className="w-full p-4 rounded-xl border outline-none 
+                       focus:ring-2 focus:ring-black"
           />
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-black text-white p-3 rounded flex justify-center items-center gap-2 disabled:opacity-50"
+            className="w-full py-4 rounded-xl bg-black text-white 
+                       font-bold flex items-center justify-center gap-2
+                       hover:scale-[1.02] transition
+                       disabled:opacity-50"
           >
             <UserPlus className="w-5 h-5" />
-            {loading ? "Signing up..." : "Signup"}
+            {loading ? "Creating account..." : "Sign Up"}
           </button>
         </form>
 
-        <p className="mt-4 text-center">
-          Already have an account? <Link href="/login">Login</Link>
+        {/* LOGIN LINK */}
+        <p className="mt-6 text-center text-sm">
+          Already have an account?{" "}
+          <Link href="/login" className="font-semibold underline">
+            Login
+          </Link>
         </p>
+
       </motion.div>
     </div>
   );
