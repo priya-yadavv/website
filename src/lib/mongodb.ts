@@ -1,14 +1,16 @@
 import { MongoClient } from "mongodb";
 
 const uri = process.env.MONGODB_URI!;
-const client = new MongoClient(uri);
+const options = {};
 
+let client;
 let clientPromise: Promise<MongoClient>;
 
-if (!(globalThis as any)._mongoClientPromise) {
-  (globalThis as any)._mongoClientPromise = client.connect();
+if (!process.env.MONGODB_URI) {
+  throw new Error("Please add MONGODB_URI");
 }
 
-clientPromise = (globalThis as any)._mongoClientPromise;
+client = new MongoClient(uri, options);
+clientPromise = client.connect();
 
 export default clientPromise;
