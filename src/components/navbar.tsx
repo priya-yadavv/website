@@ -2,9 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useTheme } from "next-themes"; // ✅ added
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // ✅ theme hook
+  const { theme, setTheme } = useTheme();
 
   // check login on load
   useEffect(() => {
@@ -52,7 +56,15 @@ export default function Navbar() {
           Feedback
         </Link>
 
-        {/* 🔥 AUTH */}
+        {/* 🌙 THEME TOGGLE */}
+        <button
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          className="text-white border px-2 py-1 rounded"
+        >
+          Toggle
+        </button>
+
+        {/* 🔐 AUTH */}
         {!isLoggedIn ? (
           <>
             <Link href="/login" className="text-white/80 hover:text-white">
