@@ -1,25 +1,51 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import fs from "fs";
+import path from "path";
+import crypto from "crypto";
+
+// Path to our simple JSON user database (same file the signup route writes to)
+const USERS_FILE = path.join(process.cwd(), "src", "data", "users.json");
+
+function hashPassword(password: string): string {
+  return crypto.createHash("sha256").update(password).digest("hex");
+}
+
+function readUsers(): { id: string; email: string; passwordHash: string }[] {
+  try {
+    const data = fs.readFileSync(USERS_FILE, "utf-8");
+    return JSON.parse(data);
+  } catch {
+    return [];
+  }
+}
 
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "developer@luminacode.ai" },
-        password: { label: "Password", type: "password" }
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // Mock user for the hackathon demo
-        if (credentials?.email === "developer@luminacode.ai" && credentials.password === "password") {
-          return { id: "1", name: "Lead Developer", email: "developer@luminacode.ai" };
-        }
-        return null;
-      }
-    })
+        if (!credentials?.email || !credentials?.password) return null;
+
+        const users = readUsers();
+        const user = users.find((u) => u.email === credentials.email);
+
+        if (!user) return null;
+
+        // Compare hashed passwords
+        const inputHash = hashPassword(credentials.password);
+        if (inputHash !== user.passwordHash) return null;
+
+        return { id: user.id, name: user.email, email: user.email };
+      },
+    }),
   ],
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
   session: {
     strategy: "jwt",
@@ -28,3 +54,4 @@ const handler = NextAuth({
 });
 
 export { handler as GET, handler as POST };
+

@@ -8,8 +8,8 @@ import { useRouter } from "next/navigation";
 import Link from 'next/link';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("developer@luminacode.ai");
-  const [password, setPassword] = useState("password");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
