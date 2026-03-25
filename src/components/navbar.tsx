@@ -57,13 +57,7 @@ export default function Navbar() {
         </Link>
 
         {/* 🌙 THEME TOGGLE */}
-        <button
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="text-white border px-2 py-1 rounded"
-        >
-          Toggle
-        </button>
-
+        
         {/* 🔐 AUTH */}
         {!isLoggedIn ? (
           <>
