@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-glow: var(--primary-glow);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-panel: var(--panel);
+  --color-panel-border: var(--panel-border);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-playfair);
+}
+
+@layer base {
+  :root {
+    /* Vanilla / Wine Theme (Light Mode) */
+    --background: #FDFBF7; 
+    --foreground: #1A1A1A; 
+    --primary: #721C3A; 
+    --secondary: #5C6B52; /* Matcha */
+    --accent: #B89030; /* Gold */
+    --primary-glow: rgba(114, 28, 58, 0.15);
+    --panel: #FFFFFF;
+    --panel-border: #EAE5D9;
+  }
+  
+  .dark {
+    /* Black / Wine Theme (Dark Mode) */
+    --background: #09090B; 
+    --foreground: #FDFBF7; 
+    --primary: #A32A55; 
+    --secondary: #8F9E82; /* Soft Matcha */
+    --accent: #E5B53A; /* Bright Gold */
+    --primary-glow: rgba(163, 42, 85, 0.3);
+    --panel: #131316;
+    --panel-border: #2B1D25;
+  }
+}
+
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    background: var(--panel);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  
+  .ethereal-glow {
+    box-shadow: 0 0 40px var(--primary-glow);
+  }
+
+  .text-gradient-primary {
+    background: linear-gradient(135deg, var(--primary), #FF7597);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
