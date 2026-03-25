@@ -9,26 +9,40 @@ import Link from "next/link";
 export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
-    const res = await fetch("/api/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.success) {
-      alert("Signup successful");
+      console.log("SIGNUP RESPONSE:", data); // 🔥 DEBUG
+
+      if (!res.ok) {
+        alert(data.message || "Signup failed ❌");
+        return;
+      }
+
+      alert("Signup successful ✅");
       router.push("/login");
-    } else {
-      alert("Signup failed");
+
+    } catch (error) {
+      console.error("Signup error:", error);
+      alert("Something went wrong ❌");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,9 +70,13 @@ export default function SignupPage() {
             className="w-full p-3 border rounded"
           />
 
-          <button className="w-full bg-black text-white p-3 rounded flex justify-center items-center gap-2">
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-black text-white p-3 rounded flex justify-center items-center gap-2 disabled:opacity-50"
+          >
             <UserPlus className="w-5 h-5" />
-            Signup
+            {loading ? "Signing up..." : "Signup"}
           </button>
         </form>
 
