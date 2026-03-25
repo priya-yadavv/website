@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import clientPromise from '@/lib/mongodb';
+import getClientPromise from '@/lib/mongodb';
 
 function hashPassword(password: string): string {
     return crypto.createHash('sha256').update(password).digest('hex');
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
             );
         }
 
-        const client = await clientPromise;
+        const client = await getClientPromise();
         const db = client.db('luminacode');
         const users = db.collection('users');
 
